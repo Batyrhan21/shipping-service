@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  nginx:
+    image: nginx:1.13
+    container_name: shipping_nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ../config/nginx/conf.d.local:/etc/nginx/conf.d
+      - ../src/back_static:/opt/services/shipping-backend/src/back_static
+      - ../src/back_media:/opt/services/shipping-backend/src/back_media
+    networks:
+      - nginx_network
