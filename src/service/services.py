@@ -23,7 +23,7 @@ class ShipmentService:
     @classmethod
     def create_shipment_by_zip_code(
         cls, pick_zip: str, delivery_zip: str, weight: int, description: str
-    ) -> None: 
+    ) -> None:
         try:
             pick_location = cls.__location_model.objects.get(zip_code=pick_zip)
             delivery_location = cls.__location_model.objects.get(zip_code=delivery_zip)
@@ -35,7 +35,7 @@ class ShipmentService:
             weight=weight,
             description=description,
         )
-    
+
     @staticmethod
     def get_nearby_trucks(obj, is_count: bool) -> Union[int, List[str]]:
         pickup_location = obj.pick_up

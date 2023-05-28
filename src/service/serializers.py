@@ -31,7 +31,7 @@ class ShipmentListSerializer(serializers.ModelSerializer):
         ]
 
     def get_count_nearby_trucks(self, obj) -> int:
-        return services.ShipmentService.get_nearby_trucks(obj=obj,is_count=True)
+        return services.ShipmentService.get_nearby_trucks(obj=obj, is_count=True)
 
 
 class ShipmentRetriveSerializer(serializers.ModelSerializer):
@@ -57,6 +57,7 @@ class ShipmentRetriveSerializer(serializers.ModelSerializer):
             "description",
             "number_nearby_trucks",
         ]
+        read_only = ["id", "number_nearby_trucks", "pick_up", "delivery"]
 
     def get_number_nearby_trucks(self, obj) -> int:
         return services.ShipmentService.get_nearby_trucks(obj=obj, is_count=False)

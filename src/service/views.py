@@ -33,12 +33,25 @@ class ShipmentAPIView(generics.GenericAPIView):
         )
 
 
-class ShipmentRetrieveAPIView(generics.RetrieveAPIView):
+class ShipmentRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = services.ShipmentService.get_list(is_deleted=False)
     serializer_class = serializers.ShipmentRetriveSerializer
-    lookup_field = 'id'
+    lookup_field = "id"
 
     def get(self, request, *args, **kwargs) -> response.Response:
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return response.Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return response.Response(
+            data={
+                "message": "Shipment data successfully updated",
+                "data": serializers.ShipmentRetriveSerializer(instance).data,
+                "status": "Updated",
+            }
+        )
