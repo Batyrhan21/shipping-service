@@ -20,7 +20,7 @@ class ShipmentService:
     @classmethod
     def create_shipment_by_zip_code(
         cls, pick_zip: str, delivery_zip: str, weight: int, description: str
-    ) -> QuerySet[models.Shipment]:
+    ) -> None: 
         try:
             pick_location = cls.__location_model.objects.get(zip_code=pick_zip)
             delivery_location = cls.__location_model.objects.get(zip_code=delivery_zip)

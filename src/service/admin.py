@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import QuerySet
 
 from service import models
 
@@ -26,7 +27,7 @@ class ShipmentAdmin(admin.ModelAdmin):
     ]
     raw_id_fields = ["pick_up", "delivery"]
 
-    def get_queryset(self, request):
+    def get_queryset(self, request) -> QuerySet[models.Shipment]:
         queryset = super().get_queryset(request)
         queryset = queryset.select_related("pick_up", "delivery")
         return queryset
@@ -44,7 +45,7 @@ class TruckAdmin(admin.ModelAdmin):
     ]
     ordering = ["-created_at"]
 
-    def get_queryset(self, request):
+    def get_queryset(self, request) -> QuerySet[models.Truck]:
         queryset = super().get_queryset(request)
         queryset = queryset.select_related("curr_location")
         return queryset

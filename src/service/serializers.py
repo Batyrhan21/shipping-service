@@ -1,8 +1,8 @@
 from geopy.distance import geodesic
 from geopy.point import Point
 from django.core.validators import MaxValueValidator
-
 from rest_framework import serializers
+
 from service import models
 
 
@@ -30,7 +30,7 @@ class ShipmentListSerializer(serializers.ModelSerializer):
             "count_nearby_trucks",
         ]
 
-    def get_count_nearby_trucks(self, obj):
+    def get_count_nearby_trucks(self, obj) -> int:
         pickup_location = obj.pick_up
         pickup_point = Point(pickup_location.latitude, pickup_location.longitude)
         nearby_trucks = models.Truck.objects.filter(is_deleted=False).select_related(

@@ -6,7 +6,7 @@ from service import serializers, services
 class ShipmentAPIView(generics.GenericAPIView):
     serializer_class = serializers.ShipmentListSerializer
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs) -> response.Response:
         shipments = services.ShipmentService.get_list(is_deleted=False)
         serializer = self.get_serializer(shipments, many=True)
         return response.Response(
@@ -14,7 +14,7 @@ class ShipmentAPIView(generics.GenericAPIView):
             status=status.HTTP_200_OK,
         )
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) -> response.Response:
         serializer = serializers.ShipmentCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = services.ShipmentService.create_shipment_by_zip_code(
