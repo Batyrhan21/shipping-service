@@ -12,43 +12,37 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         csv_file = options["csv_file"]
-
         with open(csv_file, "r") as file:
             reader = csv.reader(file)
             next(reader)
             for row in reader:
-                if len(row) >= 5:
-                    lat, lng, city, state_name, *_ = row
-                    zip_code = ""
-
-                    if len(row) > 5:
-                        zip_code = row[0]
-                    try:
-                        latitude = Decimal(lat) #NEED_TO_FIX
-                        longitude = Decimal(lng)
-                    except Decimal.InvalidOperation:
-                        self.stdout.write(
-                            self.style.WARNING(
-                                f"Invalid format of decimal: {lat}, {lng}"
-                            )
-                        )
-                        continue
-                    locations = Location.objects.filter(zip_code=zip_code)
-                    if locations.exists():
-                        self.stdout.write(
-                            self.style.WARNING(
-                                f"Duplicate location with latitude={latitude}, longitude={longitude} found"
-                            )
-                        )
-                        continue
-                    location = Location.objects.create(
-                        latitude=latitude,
-                        longitude=longitude,
-                        city=city,
-                        state=state_name,
-                        zip_code=zip_code,
-                    )
+                zip_code = row[0]
+                lat = row[1]
+                lng = row[2]
+                city = row[3]
+                state_name = row[5]
+                try:
+                    latitude = Decimal(lat)
+                    longitude = Decimal(lng)
+                except Decimal.InvalidOperation:
                     self.stdout.write(
-                        self.style.SUCCESS(f'Location "{location}" created.')
+                        self.style.WARNING(f"Invalid format of decimal: {lat}, {lng}")
                     )
+                    continue
+                locations = Location.objects.filter(zip_code=zip_code)
+                if locations.exists():
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f"Duplicate location with latitude={latitude}, longitude={longitude} found"
+                        )
+                    )
+                    continue
+                location = Location.objects.create(
+                    latitude=latitude,
+                    longitude=longitude,
+                    city=city,
+                    state=state_name,
+                    zip_code=zip_code,
+                )
+                self.stdout.write(self.style.SUCCESS(f'Location "{location}" created.'))
         self.stdout.write(self.style.SUCCESS("Data unloading completed."))

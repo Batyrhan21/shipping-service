@@ -7,8 +7,8 @@ from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/v1/docs/", include_docs_urls(title="TipsOn API")),
     path('healthcheck/', include('health_check.urls')),
+    path('api/v1/', include('service.urls'))
 ]
 
 if settings.DEBUG:
