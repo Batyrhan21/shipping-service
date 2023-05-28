@@ -6,9 +6,6 @@ from service import models
 @admin.register(models.Shipment)
 class ShipmentAdmin(admin.ModelAdmin):
     list_display = ["pick_up", "delivery", "weight", "description"]
-    list_filter = [
-        "delivery",
-    ]
     search_fields = [
         "description",
         "weight",
@@ -27,12 +24,17 @@ class ShipmentAdmin(admin.ModelAdmin):
         "description",
         "created_at",
     ]
+    raw_id_fields = ["pick_up", "delivery"]
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.select_related("pick_up", "delivery")
+        return queryset
 
 
 @admin.register(models.Truck)
 class TruckAdmin(admin.ModelAdmin):
     list_display = ["number", "curr_location", "load_capacity"]
-    list_filter = ["curr_location", "load_capacity"]
     search_fields = ["number", "curr_location__city", "curr_location__state"]
     readonly_fields = ["created_at", "id"]
     fields = [
@@ -41,6 +43,11 @@ class TruckAdmin(admin.ModelAdmin):
         "created_at",
     ]
     ordering = ["-created_at"]
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.select_related("curr_location")
+        return queryset
 
 
 @admin.register(models.Location)
