@@ -7,5 +7,10 @@ urlpatterns = [
         views.ShipmentAPIView.as_view(),
         name="shipment-list",
     ),
+    path(
+        "shipment/<uuid:id>/",
+        views.ShipmentRetrieveAPIView.as_view(),
+        name="shipment-get",
+    ),
 ]
 

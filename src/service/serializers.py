@@ -3,7 +3,7 @@ from geopy.point import Point
 from django.core.validators import MaxValueValidator
 from rest_framework import serializers
 
-from service import models
+from service import models, services
 
 
 class ShipmentListSerializer(serializers.ModelSerializer):
@@ -31,19 +31,35 @@ class ShipmentListSerializer(serializers.ModelSerializer):
         ]
 
     def get_count_nearby_trucks(self, obj) -> int:
-        pickup_location = obj.pick_up
-        pickup_point = Point(pickup_location.latitude, pickup_location.longitude)
-        nearby_trucks = models.Truck.objects.filter(is_deleted=False).select_related(
-            "curr_location"
-        )
-        count = 0
-        for truck in nearby_trucks:
-            truck_location = truck.curr_location
-            truck_point = Point(truck_location.latitude, truck_location.longitude)
-            distance = geodesic(pickup_point, truck_point).miles
-            if distance <= 450:
-                count += 1
-        return count
+        return services.ShipmentService.get_nearby_trucks(obj=obj,is_count=True)
+
+
+class ShipmentRetriveSerializer(serializers.ModelSerializer):
+    pick_up = serializers.PrimaryKeyRelatedField(
+        queryset=models.Location.objects.filter(is_deleted=False),
+        allow_null=True,
+        required=False,
+    )
+    delivery = serializers.PrimaryKeyRelatedField(
+        queryset=models.Location.objects.filter(is_deleted=False),
+        allow_null=True,
+        required=False,
+    )
+    number_nearby_trucks = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.Shipment
+        fields = [
+            "id",
+            "pick_up",
+            "delivery",
+            "weight",
+            "description",
+            "number_nearby_trucks",
+        ]
+
+    def get_number_nearby_trucks(self, obj) -> int:
+        return services.ShipmentService.get_nearby_trucks(obj=obj, is_count=False)
 
 
 class ShipmentCreateSerializer(serializers.ModelSerializer):

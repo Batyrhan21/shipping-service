@@ -31,3 +31,14 @@ class ShipmentAPIView(generics.GenericAPIView):
             },
             status=status.HTTP_201_CREATED,
         )
+
+
+class ShipmentRetrieveAPIView(generics.RetrieveAPIView):
+    queryset = services.ShipmentService.get_list(is_deleted=False)
+    serializer_class = serializers.ShipmentRetriveSerializer
+    lookup_field = 'id'
+
+    def get(self, request, *args, **kwargs) -> response.Response:
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
