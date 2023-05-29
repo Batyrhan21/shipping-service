@@ -5,7 +5,7 @@
 
 ![image](images/cargo.jpg)
 
-*Link to the test task [link](ihttps://faint-adasaurus-4bc.notion.site/web-Python-Middle-c1467cf373c24f0cafb8bfe0fe77cc79).*
+*Link to the test task [link](https://faint-adasaurus-4bc.notion.site/web-Python-Middle-c1467cf373c24f0cafb8bfe0fe77cc79).*
 
 # Table of contents
 
