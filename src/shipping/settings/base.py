@@ -12,23 +12,20 @@ PRODUCTION = env("PRODUCTION", default=False, cast=bool)
 
 # Application definition
 
-#COMMON_APPS
+# COMMON_APPS
 COMMON_APPS = [
     "common.apps.AuthAdminConfig",
 ]
 
 # LOCAL_APPS
-LOCAL_APPS = [
-    "common",
-    "service.apps.ServiceConfig"
-]
+LOCAL_APPS = ["common", "service.apps.ServiceConfig"]
 
 THIRD_PARTY_APPS = [
     "rest_framework",
     "corsheaders",
     "debug_toolbar",
     "django_filters",
-    'health_check', 
+    "health_check",
     #'health_check.contrib.redis',
 ]
 
@@ -127,5 +124,4 @@ if DEBUG:
     MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
     DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: True}
 
-
-#REDIS_URL = "redis://redis:6370"
+CELERY_BROKER_URL = "redis://redis:6379"

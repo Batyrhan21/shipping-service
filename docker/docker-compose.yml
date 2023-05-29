@@ -47,7 +47,7 @@ services:
       start_period: 60s
 
   redis:
-    image: redis
+    image: redis:7-alpine
     ports:
     - 6379:6379
     entrypoint: ["redis-server","/usr/local/etc/redis/redis.conf"]
@@ -59,6 +59,20 @@ services:
     networks:
       - redis_network
 
+  worker:
+    restart: unless-stopped
+    build:
+      context: ..
+    hostname: worker
+    entrypoint: "sh /opt/services/shipping-backend/entrypoints/celery_start.sh" 
+    volumes:
+      - ../:/opt/services/shipping-backend 
+    links:
+      - redis
+    networks:
+      - worker_network
+
+
 volumes:
   redis-data: 
 
@@ -68,4 +82,6 @@ networks:
   db_network:
     driver: bridge
   redis_network:
+    driver: bridge
+  worker_network:
     driver: bridge
