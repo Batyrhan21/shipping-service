@@ -55,6 +55,26 @@ class ShipmentRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
                 "status": "Updated",
             }
         )
-    
 
-#class TruckRetriveAPIView(generics.RetrieveDestroyAPIView)
+
+class TruckRetriveAPIView(generics.RetrieveUpdateAPIView):
+    queryset = services.TruckService.get_list(is_deleted=False)
+    serializer_class = serializers.TruckUpdateSerializer
+    lookup_field = "id"
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        services.TruckService.update_truck_by_zip(
+            instance=instance,
+            location_zip=serializer.validated_data.get("location_zip"),
+        )
+        serializer.save()
+        return response.Response(
+            data={
+                "message": "Shipment data successfully updated",
+                "data": serializers.TruckUpdateSerializer(instance).data,
+                "status": "Updated",
+            }
+        )

@@ -12,5 +12,9 @@ urlpatterns = [
         views.ShipmentRetrieveAPIView.as_view(),
         name="shipment-get",
     ),
+    path(
+        "truck/<uuid:id>/",
+        views.TruckRetriveAPIView.as_view(),
+        name="shipment-update",
+    ),
 ]
-

@@ -35,7 +35,7 @@ class ShipmentAdmin(admin.ModelAdmin):
 
 @admin.register(models.Truck)
 class TruckAdmin(admin.ModelAdmin):
-    list_display = ["number", "curr_location", "load_capacity"]
+    list_display = ["id", "number", "curr_location", "load_capacity"]
     search_fields = ["number", "curr_location__city", "curr_location__state"]
     readonly_fields = ["created_at", "id"]
     fields = [

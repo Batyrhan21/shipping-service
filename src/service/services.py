@@ -60,3 +60,26 @@ class ShipmentService:
         if is_count:
             return count
         return numbers
+
+
+class TruckService:
+    __truck_model = models.Truck
+    __location_model = models.Location
+
+    @classmethod
+    def get_list(cls, **filters) -> QuerySet[models.Truck]:
+        return (
+            cls.__truck_model.objects.filter(**filters)
+            .order_by("-created_at")
+            .only("id", "number", "curr_location", "load_capacity")
+            .select_related("curr_location")
+        )
+
+    @classmethod
+    def update_truck_by_zip(cls, instance, location_zip) -> None:
+        try:
+            qs_location = cls.__location_model.objects.get(zip_code=location_zip)
+        except cls.__location_model.DoesNotExist:
+            raise ValidationError("Location not found.", code="invalid")
+        instance.curr_location = qs_location
+        instance.save()

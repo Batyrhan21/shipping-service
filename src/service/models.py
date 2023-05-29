@@ -61,9 +61,10 @@ class Truck(BaseModel):
         return f"{self.curr_location} - {self.number}"
 
     def save(self, *args, **kwargs):
-        locations = Location.objects.filter(is_deleted=False)
-        random_location = random.choice(locations)
-        self.curr_location = random_location
+        if not self.pk:
+            locations = Location.objects.filter(is_deleted=False)
+            random_location = random.choice(locations)
+            self.curr_location = random_location
         super().save(*args, **kwargs)
 
     class Meta:

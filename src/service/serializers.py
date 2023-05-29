@@ -1,5 +1,3 @@
-from geopy.distance import geodesic
-from geopy.point import Point
 from django.core.validators import MaxValueValidator
 from rest_framework import serializers
 
@@ -74,3 +72,14 @@ class ShipmentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Shipment
         fields = ["id", "weight", "description", "pick_up", "delivery"]
+
+
+class TruckUpdateSerializer(serializers.ModelSerializer):
+    number = serializers.CharField(required=False, allow_null=True)
+    location_zip = serializers.CharField(required=True, allow_null=False)
+    load_capacity = serializers.IntegerField()
+
+    class Meta:
+        model = models.Truck
+        fields = ["id", "number", "location_zip", "load_capacity"]
+        read_only = ["id", "created_at"]
