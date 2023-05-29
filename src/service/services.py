@@ -56,7 +56,7 @@ class ShipmentService:
             distance = geodesic(pickup_point, truck_point).miles
             if distance <= 450:
                 count += 1
-                numbers.append(truck.number)
+                numbers.append({truck.number: f"{distance} miles"})
         if is_count:
             return count
         return numbers
