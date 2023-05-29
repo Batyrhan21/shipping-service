@@ -36,7 +36,10 @@ class Command(BaseCommand):
                             f"Duplicate location with latitude={latitude}, longitude={longitude} found"
                         )
                     )
-                    continue
+                    self.stdout.write(
+                        self.style.ERROR("Data uploading is stopped !!")
+                    )
+                    break 
                 location = Location.objects.create(
                     latitude=latitude,
                     longitude=longitude,

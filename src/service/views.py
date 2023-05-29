@@ -55,3 +55,6 @@ class ShipmentRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
                 "status": "Updated",
             }
         )
+    
+
+#class TruckRetriveAPIView(generics.RetrieveDestroyAPIView)
