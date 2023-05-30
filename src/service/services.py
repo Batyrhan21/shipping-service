@@ -1,3 +1,4 @@
+import random
 from typing import Union, List
 from geopy.distance import geodesic
 from geopy.point import Point
@@ -42,7 +43,7 @@ class ShipmentService:
         queryset.delete()
 
     @staticmethod
-    def get_nearby_trucks(obj, is_count: bool) -> Union[int, List[str]]:
+    def get_nearby_trucks(obj, is_count: bool, miles: float) -> Union[int, List[str]]:
         pickup_location = obj.pick_up
         pickup_point = Point(pickup_location.latitude, pickup_location.longitude)
         nearby_trucks = models.Truck.objects.filter(is_deleted=False).select_related(
@@ -54,7 +55,7 @@ class ShipmentService:
             truck_location = truck.curr_location
             truck_point = Point(truck_location.latitude, truck_location.longitude)
             distance = geodesic(pickup_point, truck_point).miles
-            if distance <= 450:
+            if distance <= float(miles):
                 count += 1
                 numbers.append({truck.number: f"{distance} miles"})
         if is_count:
@@ -83,3 +84,13 @@ class TruckService:
             raise ValidationError("Location not found.", code="invalid")
         instance.curr_location = qs_location
         instance.save()
+
+
+    @classmethod
+    def update_location_random(cls) -> None:
+        trucks =  cls.__truck_model.objects.filter(is_deleted=False)
+        for truck in trucks:
+            locations = cls.__location_model.objects.filter(is_deleted=False)
+            random_location = random.choice(locations)
+            truck.curr_location = random_location
+            truck.save()

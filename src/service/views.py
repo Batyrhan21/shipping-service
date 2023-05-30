@@ -7,7 +7,8 @@ class ShipmentAPIView(generics.GenericAPIView):
     serializer_class = serializers.ShipmentListSerializer
 
     def get(self, request, *args, **kwargs) -> response.Response:
-        shipments = services.ShipmentService.get_list(is_deleted=False)
+        weight = self.request.query_params.get("weight")
+        shipments = services.ShipmentService.get_list(is_deleted=False, weight=weight)
         serializer = self.get_serializer(shipments, many=True)
         return response.Response(
             data={"data": serializer.data},

@@ -18,7 +18,7 @@ COMMON_APPS = [
 ]
 
 # LOCAL_APPS
-LOCAL_APPS = ["common", "service.apps.ServiceConfig"]
+LOCAL_APPS = ["common", "service"]
 
 THIRD_PARTY_APPS = [
     "rest_framework",
@@ -26,6 +26,7 @@ THIRD_PARTY_APPS = [
     "debug_toolbar",
     "django_filters",
     "health_check",
+    "django_crontab",
     #'health_check.contrib.redis',
 ]
 
@@ -110,6 +111,12 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
+
+CRON_CLASSES = [
+    'service.cron.TruckCronJob',
+]
+
+
 from .cors import *
 from .thems import *
 
@@ -123,5 +130,3 @@ if DEBUG:
     INTERNAL_IPS = ["127.0.0.1"]
     MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
     DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: True}
-
-CELERY_BROKER_URL = "redis://redis:6379"
