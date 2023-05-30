@@ -32,7 +32,6 @@ class ShipmentListSerializer(serializers.ModelSerializer):
         return services.ShipmentService.get_nearby_trucks(
             obj=obj,
             is_count=True,
-            miles=self.context.get("request").query_params.get("miles"),
         )
 
 

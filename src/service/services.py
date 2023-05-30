@@ -43,9 +43,7 @@ class ShipmentService:
         queryset.delete()
 
     @staticmethod
-    def get_nearby_trucks(
-        obj, is_count: bool, miles: float = 450
-    ) -> Union[int, List[str]]:
+    def get_nearby_trucks(obj, is_count: bool) -> Union[int, List[str]]:
         pickup_location = obj.pick_up
         pickup_point = Point(pickup_location.latitude, pickup_location.longitude)
         nearby_trucks = models.Truck.objects.filter(is_deleted=False).select_related(
@@ -57,7 +55,7 @@ class ShipmentService:
             truck_location = truck.curr_location
             truck_point = Point(truck_location.latitude, truck_location.longitude)
             distance = geodesic(pickup_point, truck_point).miles
-            if distance <= float(miles):
+            if distance <= 450:
                 count += 1
                 numbers.append({truck.number: f"{distance} miles"})
         if is_count:
