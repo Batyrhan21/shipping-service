@@ -9,7 +9,6 @@ python manage.py collectstatic --no-input
 echo "Выгружаю данные из файла csv"
 python manage.py unload_locations ../uszips.csv
 echo "Cron schedule start"
-python manage.py crontab add
-python manage.py crontab run
+python manage.py runcrons
 echo "Запускаю сервер..."
 gunicorn shipping.wsgi --bind 0.0.0.0:8000 --reload

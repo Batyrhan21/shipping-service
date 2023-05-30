@@ -26,8 +26,7 @@ THIRD_PARTY_APPS = [
     "debug_toolbar",
     "django_filters",
     "health_check",
-    "django_crontab",
-    #'health_check.contrib.redis',
+    "django_cron",
 ]
 
 THEME_APPS = [

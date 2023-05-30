@@ -3,7 +3,7 @@ from django_cron import CronJobBase, Schedule
 from service.services import TruckService
 
 class TruckCronJob(CronJobBase):
-    RUN_EVERY_MINS = 3
+    RUN_EVERY_MINS = 1
     RETRY_AFTER_FAILURE_MINS = 1
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS, retry_after_failure_mins=RETRY_AFTER_FAILURE_MINS)
     

@@ -43,7 +43,9 @@ class ShipmentService:
         queryset.delete()
 
     @staticmethod
-    def get_nearby_trucks(obj, is_count: bool, miles: float) -> Union[int, List[str]]:
+    def get_nearby_trucks(
+        obj, is_count: bool, miles: float = 450
+    ) -> Union[int, List[str]]:
         pickup_location = obj.pick_up
         pickup_point = Point(pickup_location.latitude, pickup_location.longitude)
         nearby_trucks = models.Truck.objects.filter(is_deleted=False).select_related(
@@ -85,10 +87,9 @@ class TruckService:
         instance.curr_location = qs_location
         instance.save()
 
-
     @classmethod
     def update_location_random(cls) -> None:
-        trucks =  cls.__truck_model.objects.filter(is_deleted=False)
+        trucks = cls.__truck_model.objects.filter(is_deleted=False)
         for truck in trucks:
             locations = cls.__location_model.objects.filter(is_deleted=False)
             random_location = random.choice(locations)
